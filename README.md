@@ -46,17 +46,6 @@ VS Code
 
 REST APIs
 
-Project Structure
-SleepSync/
-│── src/
-│   ├── components/
-│   ├── pages/
-│   ├── App.jsx
-│   └── main.jsx
-│── public/
-│── index.html
-│── package.json
-│── vite.config.js
 
 Getting Started
 1. Clone the repo
