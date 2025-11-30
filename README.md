@@ -28,9 +28,7 @@ React
 
 Vite
 
-TailwindCSS
-
-Redux
+TailwindCSS (optional)
 
 Backend
 
@@ -46,7 +44,19 @@ Git
 
 VS Code
 
+REST APIs
 
+Project Structure
+SleepSync/
+│── src/
+│   ├── components/
+│   ├── pages/
+│   ├── App.jsx
+│   └── main.jsx
+│── public/
+│── index.html
+│── package.json
+│── vite.config.js
 
 Getting Started
 1. Clone the repo
@@ -70,7 +80,3 @@ Smart alarm
 Weekly wellness score
 
 Mobile app version
-
-License
-
-This project is open-source under the MIT License.
