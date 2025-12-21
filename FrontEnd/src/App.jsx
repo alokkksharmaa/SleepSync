@@ -1,17 +1,15 @@
-import { Routes, Route } from 'react-router-dom';
-import Login from './Components/Login';
-import Register from './Components/Register';
-import Dashboard from './Components/Dashboard';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AddSleep from "./pages/AddSleep";
+import SleepList from "./pages/SleepList";
 
 function App() {
   return (
-    <div className="container mx-auto">
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<SleepList />} />
+        <Route path="/add" element={<AddSleep />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
 }
 
