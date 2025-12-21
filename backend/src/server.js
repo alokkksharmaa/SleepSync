@@ -1,23 +1,28 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
 
-// Init
 const app = express();
+
+/* Middleware */
+app.use(cors());
+app.use(express.json());
+
+/* Database */
 connectDB();
 
-// JSON parsing
-app.use(express.json());
-app.use(cors());
-
-// Test HTTP
+/* Test route */
 app.get("/", (req, res) => {
-  res.send("API running");
+  res.send("SleepSync API is running");
 });
 
-// Mount routes here
+/* Routes */
 app.use("/api/sleep", require("./routes/sleepRoutes"));
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server on ${PORT}`));
+/* Server */
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});

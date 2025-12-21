@@ -1,16 +1,34 @@
 const Sleep = require("../models/Sleep");
 
-// Create
-exports.createSleep = async (req, res) => {
+/* CREATE sleep record */
+exports.addSleep = async (req, res) => {
   try {
-    const sleep = await Sleep.create(req.body);
+    const { date, duration, quality } = req.body;
+
+    if (!date || !duration) {
+      return res.status(400).json({
+        message: "Date and duration are required"
+      });
+    }
+
+    const sleep = await Sleep.create({
+      date,
+      duration,
+      quality
+    });
+
     res.status(201).json(sleep);
-  } catch (err) { res.status(500).json(err); }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.getSleeps = async (req, res) => {
+/* READ all sleep records */
+exports.getAllSleep = async (req, res) => {
   try {
-    const sleeps = await Sleep.find();
+    const sleeps = await Sleep.find().sort({ date: -1 });
     res.json(sleeps);
-  } catch (err) { res.status(500).json(err); }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

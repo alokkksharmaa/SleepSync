@@ -1,8 +1,15 @@
 const express = require("express");
-const { createSleep, getSleeps } = require("../controllers/sleepController");
 const router = express.Router();
 
-router.post("/", createSleep);
-router.get("/", getSleeps);
+const {
+  addSleep,
+  getAllSleep
+} = require("../controllers/sleepController");
+
+/* POST – add sleep */
+router.post("/", addSleep);
+
+/* GET – fetch sleep */
+router.get("/", getAllSleep);
 
 module.exports = router;
