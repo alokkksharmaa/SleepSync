@@ -1,28 +1,43 @@
-// FrontEnd/src/pages/AddSleep.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// FrontEnd/src/pages/EditSleep.jsx
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { FaSave } from 'react-icons/fa';
 
-const AddSleep = () => {
+const EditSleep = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [date, setDate] = useState('');
   const [duration, setDuration] = useState('');
   const [quality, setQuality] = useState('');
 
+  useEffect(() => {
+    const fetchSleep = async () => {
+      try {
+        const response = await api.get(`/sleep/${id}`);
+        const { date: fetchedDate, duration: fetchedDuration, quality: fetchedQuality } = response.data;
+        setDate(new Date(fetchedDate).toISOString().split('T')[0]); // Format for date input
+        setDuration(fetchedDuration);
+        setQuality(fetchedQuality);
+      } catch (error) {
+        console.error('Error fetching sleep record:', error);
+      }
+    };
+    fetchSleep();
+  }, [id]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/sleep', { date, duration, quality });
+      await api.put(`/sleep/${id}`, { date, duration, quality });
       navigate('/');
     } catch (error) {
-      console.error('Error adding sleep record:', error);
+      console.error('Error updating sleep record:', error);
     }
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Add Sleep Record</h1>
+      <h1 className="text-2xl font-bold mb-4">Edit Sleep Record</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1">Date:</label>
@@ -59,12 +74,12 @@ const AddSleep = () => {
             <option value="Excellent">Excellent</option>
           </select>
         </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
-          <FaSave className="mr-2" /> Save Sleep Record
+        <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          Update Sleep Record
         </button>
       </form>
     </div>
   );
 };
 
-export default AddSleep;
+export default EditSleep;
