@@ -1,6 +1,7 @@
 {
   "name": "sleepsync-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Backend for SleepSync project",
   "main": "src/server.js",
   "scripts": {
@@ -10,9 +11,11 @@
   "author": "Alok",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^7.6.0"
   },
   "devDependencies": {
