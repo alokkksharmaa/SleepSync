@@ -1,3 +1,6 @@
+// FrontEnd/src/App.jsx
+// Main app - routing only
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -20,7 +23,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* Default: redirect to dashboard which is protected */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
