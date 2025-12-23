@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
+
+// Zod validation schema
+const registerSchema = z.object({
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string().min(1, 'Please confirm your password'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
+
+const Register = () => {
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const { register: registerUser, error, clearError } = useAuth();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    clearError();
+    setSuccessMessage('');
+
+    const result = await registerUser(
+      data.username,
+      data.email,
+      data.password,
+      data.confirmPassword
+    );
+
+    if (result.success) {
+      setSuccessMessage(result.message || 'Account created. Please log in.');
+      setTimeout(() => navigate('/login'), 800);
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.08),transparent_25%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.06),transparent_25%)]" />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl w-full max-w-md p-8 md:p-10 text-white"
+      >
+        <div className="text-center mb-8 space-y-2">
+          <p className="text-sm uppercase tracking-[0.2em] text-indigo-100">SleepSync</p>
+          <h2 className="text-3xl font-bold">Create your account</h2>
+          <p className="text-indigo-100">
+            Start tracking your sleep journey today
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-sm text-indigo-100">Username</label>
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-300">
+              <span>👤</span>
+              <input
+                {...register('username')}
+                type="text"
+                placeholder="Your name"
+                className="w-full bg-transparent focus:outline-none text-white placeholder:text-indigo-200"
+              />
+            </div>
+            {errors.username && (
+              <p className="text-red-200 text-sm">{errors.username.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm text-indigo-100">Email address</label>
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-300">
+              <span>📧</span>
+              <input
+                {...register('email')}
+                type="email"
+                placeholder="you@example.com"
+                className="w-full bg-transparent focus:outline-none text-white placeholder:text-indigo-200"
+              />
+            </div>
+            {errors.email && (
+              <p className="text-red-200 text-sm">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm text-indigo-100">Password</label>
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-300">
+              <span>🔒</span>
+              <input
+                {...register('password')}
+                type="password"
+                placeholder="At least 6 characters"
+                className="w-full bg-transparent focus:outline-none text-white placeholder:text-indigo-200"
+              />
+            </div>
+            {errors.password && (
+              <p className="text-red-200 text-sm">{errors.password.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm text-indigo-100">Confirm Password</label>
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-300">
+              <span>✅</span>
+              <input
+                {...register('confirmPassword')}
+                type="password"
+                placeholder="Re-enter password"
+                className="w-full bg-transparent focus:outline-none text-white placeholder:text-indigo-200"
+              />
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-200 text-sm">{errors.confirmPassword.message}</p>
+            )}
+          </div>
+
+          {error && (
+            <p className="text-red-200 text-center text-sm bg-red-500/10 border border-red-300/30 rounded-xl py-2">
+              {error}
+            </p>
+          )}
+          {successMessage && (
+            <p className="text-emerald-200 text-center text-sm bg-emerald-500/10 border border-emerald-300/30 rounded-xl py-2">
+              {successMessage}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 text-white font-semibold py-3 rounded-xl shadow-xl hover:-translate-y-0.5 hover:shadow-2xl transition disabled:opacity-60"
+          >
+            {loading ? 'Creating account...' : 'Create account'}
+          </button>
+        </form>
+
+        <p className="text-center mt-8 text-indigo-100">
+          Already have an account?
+          <Link to="/login" className="text-white font-semibold hover:underline ml-1">
+            Sign in
+          </Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+};
+
+export default Register;
