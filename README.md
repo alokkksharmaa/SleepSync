@@ -34,7 +34,7 @@ Frontend: React (Vite), Tailwind CSS, Recharts, Axios
 
 Backend: Node.js, Express.js
 
-Database: MongoDB, Mongoose
+Database: MongoDB, Mongoose. 
 
 API Design
 
@@ -72,4 +72,4 @@ Scalable folder structure
 
 Predictable data flow
 
-Easy extensibility for auth, analytics, or multi-user support
+Easy extensibility for auth, analytics, or multi-user support.
